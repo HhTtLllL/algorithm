@@ -1,72 +1,73 @@
 // 单源点 最短路    指定一个点到其余各个顶点的最短路径
 
-#include<stdio.h>
-#include<iostream>
+#include <stdio.h>
+#include <iostream>
 
 using namespace std;
 
-
-const int INF = 0x3f3f3f3f;
 int main()
 {
-
 	int e[10][10],dis[10],book[10],i,j,n,m,t1,t2,t3,u,v,min;
-	cin >> n >> m;
 
-	// 初始化
-	for(i = 1;i <= n;i++)
+	int inf = 0x3f3f3f3f;
+
+	cin >> n >> m;
+	//初始化
+	for(int i = 1;i <= n;i++)
 	{
-		for(j = 1;j <= n;j++)
+		for(int j = 1;j <= n;j++)
 		{
 			if(i == j) e[i][j] = 0;
-			else e[i][j] = INF;
+			else e[i][j] = inf;
 		}
 	}
 
-	//　读入边
-	for(i = 1;i <= m;i++)
+	for(int i = 1;i <= m;i++)
 	{
 		cin >> t1 >> t2 >> t3;
 		e[t1][t2] = t3;
 	}
 
+	//初始化 dis 数组,这里是 1 号顶点到其余各个顶点的初始路程  假设单源起点 为 1
+	//结点 1 直接到其余结点的 距离
+	
+	for(int i = 1;i <= n;i++)  dis[i] = e[1][i];
 
-	//初始化 dis 数组
-	for(i = 1;i <= n;i++)
+	//book数组初始化
+	for(int i = 1;i <= n;i++) book[i] = 0;
+	book[1] = 1;
+
+	//dijkstra算法核心语句
+	
+	for(int i = 1;i <= n - 1;i++)    //循环 n - 1 次.
 	{
-		dis[i] = e[1][i];
-	}
-
-	for(i = 1;i <= n;i++) book[i] = 0;    book[1] = 1;
-
-	// dijkstra 
-	for(i = 1;i <= n-1;i++)  //用来控制次数
-	{
-		// 找到离 1 号顶点最近的顶点
-		min = INF;
-		for(j = 1;j <= n;j++)
+		//找到离 1 号顶点最近的顶点
+		min = inf;
+		for(int j = 1;j <= n;j++)
 		{
-			// 如果这一个点没有走过 并且  第j个点 小于 min
-			if(book[j] == 0 && dis[j] < min)
+			if(book[j] == 0 && dis[j] < min)  //如果没有选过这一点, 并且 比 min还要小的话
 			{
 				min = dis[j];
 				u = j;
 			}
 		}
-
-		book[u] = 1;  // 标记这个点已经走过
-		
-		// 从最短的路径出发,查看是否 有 用  这一点  可以优化的边.
-		for(v = 1;v <= n;v++)
+		// 选出 编号为 u 的顶点
+		book[u] = 1;
+		for(v = 1;v <= n;v++)  //遍历每一个节点u -> v 的每一个结点
 		{
-			if(e[u][v] < INF)
+			if(e[u][v] < inf)
 			{
 				if(dis[v] > dis[u] + e[u][v])   dis[v] = dis[u] + e[u][v];
 			}
 		}
-	}
 
-	for(i = 1;i <= n;i++) cout << dis[i] << " ";
+		//输出最终的结果
+	}
+	
+	for(int i = 1;i <= n;i++)  cout <<  dis[i] << " ";
+
+	
+
 
 	return 0;
 }
