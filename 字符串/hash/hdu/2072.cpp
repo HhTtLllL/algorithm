@@ -76,16 +76,4 @@ int main()
 		else	cout << s.size()<< endl;
 	}
 
-
-
-/*	sort(frontb,frontb + i);
-	int sum = 0;
-	for(int j = 0;j < i;j++)
-	{
-		if(frontb[j] != frontb [j + 1]) sum++;
-	}
-*/
-
-
-
 }

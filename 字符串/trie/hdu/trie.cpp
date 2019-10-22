@@ -12,11 +12,12 @@ class Trie
 	public:
 	int ch[maxnode][sigma_size];
 	int val[maxnode];   //保存备用信息
+//	int val1[100];
 	int sz;  //结点总数
 	Trie()
 	{
 		sz = 1;
-		memset(ch[0],0,sizeof(ch[0]));  //初始时只有一个根结点
+	//	memset(ch[0],0,sizeof(ch[0]));  //初始时只有一个根结点
 	}
 	int idx(char c)   //字符 c 的编号
 	{
@@ -39,6 +40,8 @@ class Trie
 			u = ch[u][c];  //往下走
 		}
 //		val[u] = v;  //字符串的最后一个字符的附加信息为 v 
+		/*cout << "u = " << u << endl;
+		val1[u]++;*/
 	}
 
 	int search(string s)
@@ -50,7 +53,7 @@ class Trie
 			if(!ch[u][c]) return 0; //结点不存在
 			u = ch[u][c];  //往下走
 		}
-		return val[u];
+		//return val1[u];
 	}
 };
 
@@ -58,10 +61,10 @@ class Trie
 int main()
 {
 
-	Trie t;
+	Trie t = new Trie();
 	
 	string s;
-	while(getline(cin,s))
+/*	while(getline(cin,s))
 	{
 		if(s.size() == 0) break;
 		t.insert(s);
@@ -73,6 +76,9 @@ int main()
 	{
 		cout << t.search(s) << endl;
 	}
+*/
+	t.insert("apple");
+	//cout << t.search("apple") << endl;
 
 
 

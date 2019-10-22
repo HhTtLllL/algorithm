@@ -54,7 +54,6 @@ void Manacher(char s[],int len)
 
 int main()
 {
-	cout << Mp[-10] << endl;
 	char s[MAXN];
 	while(scanf("%s",s) == 1)
 	{
@@ -63,10 +62,10 @@ int main()
 		Manacher(s,len);
 		int ans = 0;
 		for(int i = 0;i < 2*len+2;i++)  ans = max(ans,Mp[i] - 1);
-		
-		for(int i = 0;i < 2 * len + 2;i++) cnt += Mp[i];
-		cout << cnt << endl;
-		//		printf("%d\n",ans);
+		for(int i = 0;i < 2*len + 2;i++) cout << Mp[i] << " ";
+	/*	for(int i = 0;i < 2 * len + 2;i++) cnt += Mp[i];
+		cout << cnt << endl;*/
+		printf("%d\n",ans);
 	}
 	return 0;
 }
