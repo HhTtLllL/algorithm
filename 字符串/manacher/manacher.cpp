@@ -21,6 +21,7 @@ void Manacher(char s[],int len)
 		Ma[l++] = '#';
 	}
 
+
 	Ma[l] = 0;
 	int mx = 0,id = 0;
 	for(int i = 0;i < l;i++)

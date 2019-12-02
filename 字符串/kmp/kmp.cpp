@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstring>
 
+
 int next[1000010];
 char a[1000010];   //模板串
 char b[1000010];   //文本串
@@ -48,9 +49,17 @@ int kmp()
 int main()
 {
 	scanf("%s",a);
-	scanf("%s",b);
+//	scanf("%s",b);
 	m = strlen(a);
 	getnext();
+
+	for(int i = 0;i < m;i++)
+	{
+		printf("%d ",next[i]);
+	}
+	printf("\n");
+
+	/*
 	for(int i = 0;i < strlen(a);i++)
 	{
 		printf("%2d ",i);
@@ -63,6 +72,6 @@ int main()
 	printf("\n");
 	
 	printf("%d\n",kmp());
-
+*/
 	return 0;
 }

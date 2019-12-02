@@ -22,7 +22,7 @@ struct Trie
 		root = newnode(); // 根节点 也可能会有 26 个结点
 	}
 
-	void insert(char *buf)    //建立字典树
+	void insert(char buf[])    //建立字典树
 	{
 		int len = strlen(buf);
 		int now = root;
@@ -78,7 +78,7 @@ struct Trie
 		}
 	}
 
-	int query(char *buf)
+	int query(char buf[])
 	{
 		int len = strlen(buf);
 		int now = root;
@@ -106,8 +106,8 @@ int main()
 {
 	int T;
 	int n;
-	//scanf("%d",&T);
-	//while(T--)
+	scanf("%d",&T);
+	while(T--)
 	{	
 		scanf("%d",&n);
 		ac.init();
@@ -119,8 +119,7 @@ int main()
 		ac.build();
 
 		scanf("%s",buf);
-		int sum = ac.query(buf);
-		printf("%d\n",sum);
+		printf("%d\n",ac.query(buf));
 	}
 
 
