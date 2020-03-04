@@ -6,7 +6,7 @@ int next[1000010];
 char a[1000010];   //模板串
 char b[1000010];   //文本串
 
-int m;
+int m; //a 串的大小
 
 void getnext()
 {

@@ -1,0 +1,634 @@
+//前缀树
+
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+class Trie
+{
+	public:
+	int tree[50010][26];
+	int sum[50010];
+	int val[50010];
+	int tot;
+	string word;
+	Trie()
+	{
+		tot = 1;
+	}
+	void insert(string word)
+	{
+		int len = word.size();
+		int u = 0;
+		for(int i = 0;i < len;i++)
+		{
+			int c = word[i] - 'a';
+			if(!tree[u][c])
+			{
+				tree[u][c] = tot++;
+			}
+			sum[tree[u][c]]++;
+			u = tree[u][c];
+		}
+		val[u]++;
+	}
+
+	bool search(string word)
+	{
+		int len = word.size();
+		int u = 0;
+		for(int i = 0;i < len;i++)
+		{
+			int c = word[i] - 'a';
+			if(!tree[u][c])  return false;
+			u = tree[u][c];
+		}
+		if(val[u]) return true;
+		else return false;
+	}
+
+	bool startsWith(string word)
+	{
+		int len = word.size();
+		int u = 0;
+		for(int i = 0;i < len;i++)
+		{
+			int c = word[i] - 'a';
+			if(!tree[u][c]) return false;
+			u = tree[u][c];
+		}
+		if(sum[u]) return true;
+		else return false;
+	}
+};
+
+
+int main()
+{
+	Trie t;
+//	t.word = "apple";
+//
+	t.insert("apple");
+
+	if(t.search("apple"))  printf("apple 在\n");
+	if(t.search("app"))  printf("完全 app 在");
+	if(t.startsWith( "app")) printf("前缀 app 在\n");
+	
+
+
+	return 0;
+}
+
+
+
+
+//ac 自动机
+
+#include <cstdio>
+#include <cstring>
+#include <queue>
+#include <iostream>
+
+using namespace std;
+struct Trie
+{
+	int next[500010][26],fail[500010],end[500010]; // end 某一个结点 是几个模板串的未结点
+	int root,L; //L 用来记录 trie树 结点的个数和 加入结点的 顺序
+
+	int newnode()
+	{
+		for(int i = 0;i < 26;i++) 	next[L][i] = -1;
+
+		end[L++] = 0;
+		return L-1;
+	}
+	void init()
+	{
+		L = 0;
+		root = newnode(); // 根节点 也可能会有 26 个结点
+	}
+
+	void insert(char *buf)    //建立字典树
+	{
+		int len = strlen(buf);
+		int now = root;
+		for(int i = 0;i < len;i++)
+		{
+			int c = buf[i] - 'a';
+			if(next[now][c] == -1)  //如果结点不存在则新建结点
+			{
+				next[now][c] = newnode();
+			}
+			now = next[now][c];
+		}
+		end[now]++;
+
+	}
+
+	void build()
+	{
+		queue<int> Q;
+		fail[root] = root;
+		// 先找根结点下 有几个子结点
+		for(int i = 0;i < 26;i++)
+		{
+			if(next[root][i] == -1)
+			{
+				next[root][i] = root;
+			}
+			else
+			{
+				fail[next[root][i]] = root;   //建立第一层的失配指针
+				Q.push(next[root][i]);
+			}
+		}
+
+
+		while(!Q.empty())  //在已经找的结点上，继续往下找
+		{
+			int now = Q.front();
+			Q.pop();
+			for(int i = 0;i < 26;i++)
+			{
+				if(next[now][i] == -1)  //遍历这一层 的所有节点，如果每结点了，则走失配指针
+				{
+					next[now][i] = next[fail[now]][i];
+				}
+				else     // 如果下一个结点有节点出现的话，更新失配指针
+				{
+					//next[now][i]    这个结点的
+					fail[next[now][i]] = next[fail[now]][i];
+					Q.push(next[now][i]);
+				}
+			}
+		}
+	}
+
+	int query(char *buf)
+	{
+		int len = strlen(buf);
+		int now = root;
+		int res = 0;   //判断模板串 一共出现了几次
+		for(int i = 0;i < len;i++)
+		{
+			int c = buf[i] - 'a';
+			now = next[now][c];   //向下走一步
+
+			int temp = now;
+			while(temp != root)
+			{
+				res += end[temp];
+				end[temp] = 0;    //加过之后清零,避免重复添加
+				temp = fail[temp]; //这个结点结束后,走他的失配指针,看是否还有其他子串
+			}
+		}
+		return res;
+	}
+};
+
+char buf[1000010];
+Trie ac;
+int main()
+{
+	int T;
+	int n;
+	//scanf("%d",&T);
+	//while(T--)
+	{
+		scanf("%d",&n);
+		ac.init();
+		for(int i = 0;i < n;i++)
+		{
+			scanf("%s",buf);
+			ac.insert(buf);
+		}
+		ac.build();
+
+		scanf("%s",buf);
+		int sum = ac.query(buf);
+		printf("%d\n",sum);
+	}
+
+
+	return 0;
+}
+
+
+//落谷ac自动机
+
+#include<cstdio>
+#include<cstring>
+#include<iostream>
+#include<algorithm>
+using namespace std;
+int n,cnt=0;
+char tmp[1000100];
+struct node
+{
+    int fail,num;
+    int ch[30];
+}tr[1000100];
+int q[1000100];
+void build()//建立Trie树
+{
+    int len=strlen(tmp),u=0;
+    for(int i=0;i<len;i++)
+    {
+        int s=tmp[i]-'a';
+        if(tr[u].ch[s]==0) tr[u].ch[s]=++cnt;
+        u=tr[u].ch[s];
+    }
+    tr[u].num++;
+}
+void get_fail()
+{
+    int l=0,r=0;
+    for(int i=0;i<26;i++)
+        if(tr[0].ch[i]!=0)
+        {
+            tr[tr[0].ch[i]].fail=0;
+            q[++r]=tr[0].ch[i];
+        }
+    while(l<r)
+    {
+        int u=q[++l];
+        for(int i=0;i<26;i++)
+        {
+            int v=tr[u].ch[i];
+            if(v)
+            {
+                tr[v].fail=tr[tr[u].fail].ch[i];//处理fail指针，是它父亲的fail指针的i儿子
+                q[++r]=v;
+            }
+            else tr[u].ch[i]=tr[tr[u].fail].ch[i];//处理所说的“虚指针”，WA了好几次因为把这里的tr[u].ch[i]也替换成v了。。
+        }
+    }
+}
+int AC()
+{
+    int len=strlen(tmp);
+    int u=0,ans=0;
+    for(int i=0;i<len;i++)
+    {
+        int s=tmp[i]-'a';
+        u=tr[u].ch[s];
+        int v=u;
+        while(v && tr[v].num!=-1)
+        {
+            ans+=tr[v].num;
+            tr[v].num=-1;//加过了之后就不用再加了
+            v=tr[v].fail;
+        }
+    }
+    return ans;
+}
+int main()
+{
+    scanf("%d",&n);
+    for(int i=1;i<=n;i++)
+    {
+        scanf("%s",tmp);
+        build();
+    }
+    tr[0].fail=0;
+    get_fail();
+    scanf("%s",tmp);
+    printf("%d",AC());
+    return 0;
+}
+
+
+//加强版
+
+#include <iostream>
+#include <cstdio>
+#include <queue>
+
+using namespace std;
+
+const int N = 200010;
+const int T = 200010;
+const int S = 2000010;
+
+void dfs(int u);
+void add(int u, int v);
+
+char s[S];
+queue<int> q;
+int head[T], nxt[T], to[T], cnt;
+int n, tr[T][26], fail[T], tot = 1, match[N], siz[T];
+
+int main()
+{
+    int i, j, u;
+
+    scanf("%d", &n);
+
+    for (i = 1; i <= n; ++i)
+    {
+        scanf("%s", s);
+        for (u = 1, j = 0; s[j]; ++j)
+        {
+            int c = s[j] - 'a';
+            if (!tr[u][c]) tr[u][c] = ++tot;
+            u = tr[u][c];
+        }
+        match[i] = u; // 记录每个模式串在 Trie 树上的终止节点
+    }
+
+    for (i = 0; i < 26; ++i) tr[0][i] = 1; // 一种比较与众不同（个人认为比较正确）的 AC 自动机建法，详见上文提到的我写的博客
+
+    q.push(1);
+
+    while (!q.empty())
+    {
+        u = q.front();
+        q.pop();
+        for (i = 0; i < 26; ++i)
+        {
+            if (tr[u][i])
+            {
+                fail[tr[u][i]] = tr[fail[u]][i];
+                q.push(tr[u][i]);
+            }
+            else tr[u][i] = tr[fail[u]][i];
+        }
+    }
+
+    scanf("%s", s);
+
+    for (u = 1, i = 0; s[i]; ++i)
+    {
+        u = tr[u][s[i] - 'a'];
+        ++siz[u]; // 记录匹配次数
+    }
+
+    for (i = 2; i <= tot; ++i) add(fail[i], i); // 建 fail 树
+
+    dfs(1); // 统计子树和
+
+    for (i = 1; i <= n; ++i) printf("%d\n", siz[match[i]]);
+
+    return 0;
+}
+
+void dfs(int u)
+{
+    int i, v;
+    for (i = head[u]; i; i = nxt[i])
+    {
+        v = to[i];
+        dfs(v);
+        siz[u] += siz[v];
+    }
+}
+
+void add(int u, int v)
+{
+    nxt[++cnt] = head[u];
+    head[u] = cnt;
+    to[cnt] = v;
+}
+
+
+
+//字符串  hash
+
+// 注意 有 全是空格的情况  
+//
+//样例:
+//you are my friend(4)
+//you are     my friend(4)
+//       you are my friend(4)
+//you are my friend                   (4)
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <set>
+
+#define ll long long
+#define MOD 0x7FFFFFFF
+
+using namespace std;
+
+const int MIN = 100 + 10;
+const int MAX = 100000 + 10;
+
+ll frontb[MAX];
+char a[MAX][MIN];
+
+const int seed = 13331;
+int front_hash(char s[])
+{
+	unsigned int hash = 0;
+	int i = 0;
+	while(s[i])
+	{
+		hash = hash * seed + s[i++];
+	}
+
+	return (hash & MOD);
+}
+
+int main()
+{
+	string b;
+	char temp[100005];
+	int i = 0;
+	while(getline(cin,b) && b != "#")
+	{
+		memset(frontb,0,sizeof(frontb));
+		memset(a,0,sizeof(a));
+
+		set<int> s;
+/*		scanf("%s",a[i]);
+		if(a[i][0] == '#') break;
+		i++;*/
+		int j = 0;
+		int k = 0;
+		int flag = 0;
+		for(int i = 0;i < b.size();i++)
+		{
+			if(flag == 0 && b[i] == ' ') continue;
+			if(b[i] != ' ')
+			{
+				flag = 1;
+				a[j][k++] = b[i];
+			}
+			else if(b[i] == ' ' && (b[i+1] >= 97 && b[i+1] <= 122))
+			{
+				j++;
+				k = 0;
+			}
+		}
+
+		for(k = 0;k <= j;k++)
+		{
+			frontb[k] = front_hash(a[k]);
+			s.insert(frontb[k]);
+		}
+		if(flag == 0) cout << 0 << endl;
+		else	cout << s.size()<< endl;
+	}
+
+}
+
+
+// manacher
+
+#include <iostream>
+#include <cstring>
+
+//求最长回文串
+
+using namespace std;
+
+const int MAXN = 110010;
+char Ma[MAXN*2];
+int Mp[MAXN*2];
+
+void Manacher(char s[],int len)
+{
+	// 将字符串转变
+	int l = 0;
+	Ma[l++] = '$';
+	Ma[l++] = '#';
+	for(int i = 0;i < len;i++)
+	{
+		Ma[l++] = s[i];
+		Ma[l++] = '#';
+	}
+
+	Ma[l] = 0;
+	int mx = 0,id = 0;
+	for(int i = 0;i < l;i++)
+	{
+		//  当 mx > i时,以 i 为中心扩展回文串
+		Mp[i] = mx > i ? min(Mp[2*id - i],mx - i):1;
+
+		if(i >= Mp[i])
+		{
+			while(Ma[i + Mp[i]] == Ma[i - Mp[i]])
+			{
+				if(i < Mp[i]) cout << 111 << endl;
+				Mp[i]++;  // 向两边进行扩展   以 i 为中心扩展回文串,或者到达边界
+			}
+		}
+		if(i + Mp[i] > mx)
+		{
+			mx = i + Mp[i];
+			id = i;
+		}
+	}
+}
+
+/*
+ * abaaba
+ *
+ * i:       0 1 2 3 4 5 6 7 8 9 10 11 12 13
+ * Ma[i]:   $ # a # b # a # a #  b  #  a  #
+ * Mp[i]:   1 1 2 1 4 1 2 7 2 1  4  1  2  1
+ */
+
+int main()
+{
+	char s[MAXN];
+	while(scanf("%s",s) == 1)
+	{
+		int cnt = 0;
+		int len = strlen(s);
+		Manacher(s,len);
+		int ans = 0;
+		for(int i = 0;i < 2*len+2;i++)  ans = max(ans,Mp[i] - 1);
+		for(int i = 0;i < 2*len + 2;i++) cout << Mp[i] << " ";
+	/*	for(int i = 0;i < 2 * len + 2;i++) cnt += Mp[i];
+		cout << cnt << endl;*/
+		printf("%d\n",ans);
+	}
+	return 0;
+}
+
+
+// kmp
+
+#include <cstdio>
+#include <cstring>
+
+
+int next[1000010];
+char a[1000010];   //模板串
+char b[1000010];   //文本串
+
+int m;
+
+void getnext()
+{
+	int i,j;
+	j = next[0] = -1;
+	i = 0;
+	while(i < m)
+	{
+		while(-1 != j && a[i] != a[j]) j = next[j];
+		next[++i] = ++j;
+	}
+}
+
+int kmp()
+{
+	int i = 0,j = 0;
+	int num = 0;
+	int len1 = strlen(a);
+	int len2 = strlen(b);
+	while(i < len2)
+	{
+		if(j == -1 || b[i] == a[j])
+		{
+			i++;
+			j++;
+		}
+		else j = next[j];
+		if(j == len1)  //如果找到一个串
+		{
+			num++;
+			j = next[j];   //回溯
+		}
+	}
+	return num;
+}
+
+
+
+
+int main()
+{
+	scanf("%s",a);
+//	scanf("%s",b);
+	m = strlen(a);
+	getnext();
+
+	for(int i = 0;i < m;i++)
+	{
+		printf("%d ",next[i]);
+	}
+	printf("\n");
+
+	/*
+	for(int i = 0;i < strlen(a);i++)
+	{
+		printf("%2d ",i);
+	}
+	printf("\n");
+	for(int i = 0;i < strlen(a);i++)
+	{
+		printf("%2d ",next[i]);
+	}
+	printf("\n");
+
+	printf("%d\n",kmp());
+*/
+	return 0;
+}
+
+
