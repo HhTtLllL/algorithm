@@ -8,6 +8,8 @@
 //!/usr/bin/python
 
 class Solution {
+	//时间复杂度  O(n)
+	//空间复杂度  O(1)
 public:
     void moveZeroes(vector<int>& nums) 
     {
@@ -26,4 +28,24 @@ public:
 
 	    return ;
     }
+};
+
+
+class Solution{
+
+public:
+	void moveZeroes(vector<int>& nums)
+	{
+		int k = 0;
+		for( int i = 0 ; i < nums.size() ; i++)
+		{
+			if( nums[i] != 0 )
+				if( i != k) //假设当前代码都为非零元素，则要不停的进行下去交换下去
+					swap( nums[k++] , nums[i]);  //如果直接交换就可以省略 最后一步，给最后每一个元素赋值为0  
+				else k++
+		}
+
+		return ;
+	}
+
 };
