@@ -16,15 +16,17 @@
  * };
  */
 class Solution {
-public:
-    vector<int> preorderTraversal(TreeNode* root) 
-    {
-	    vector<int> record;
-	    if( root )
-	    {
-		    record.push_back( root->val );
-		    preorderTraversal( root->left );
-		    preorderTraversal( root->right );
-	    }
-    }
+	public:
+		vector<int> preorderTraversal(TreeNode* root) 
+		{
+			vector<int> record;
+			if( !root ) return NULL;
+			
+			record.push_back( root->val );
+			preorderTraversal( root->left );
+			preorderTraversal( root->right );
+
+			return record;
+
+		}
 };
