@@ -18,26 +18,37 @@ int main()
 {
 	int n;
 	cin >> n;
+	int tmp[10];
 
 	for(int i = 10001 ; i < 1000000 ; i ++ )
 	{
-		//string tmp = to_string(i);
-		char tmp[10];
-		sprintf(tmp,"%d",i);
 		if(i < 100000)
 		{
+			tmp[0] = i%10;
+			tmp[1] = (i/10)%10;
+			tmp[2] = (i/100)%10;
+			tmp[3] = (i/1000)%10;
+			tmp[4] = i/10000;
+
 			if(tmp[0] == tmp[4] && tmp[1] == tmp[3])
 			{
-				int res = tmp[0] - '0' + tmp[1] - '0' + tmp[2] - '0' + tmp[3] - '0' + tmp[4] - '0';
+				int res = tmp[0] + tmp[1] + tmp[2] + tmp[3] + tmp[4] ;
 				if(res == n) cout << i << endl;
 				else continue;
 			}
 		}
 		else 
 		{
+			tmp[0] = i%10;
+			tmp[1] = (i/10)%10;
+			tmp[2] = (i/100)%10;
+			tmp[3] = (i/1000)%10;
+			tmp[4] = (i/10000)%10;
+			tmp[5] = i/100000;
+			
 			if(tmp[0] == tmp[5] && tmp[1] == tmp[4] && tmp[2] == tmp[3])
 			{
-				int res = tmp[0] - '0' + tmp[1] - '0' + tmp[2] - '0' + tmp[3] - '0' + tmp[4] - '0' + tmp[5] - '0';
+				int res = tmp[0] + tmp[1] + tmp[2] + tmp[3] + tmp[4] + tmp[5];
 				if(res == n) cout << i << endl;
 				else continue;
 			}

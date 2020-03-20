@@ -33,7 +33,7 @@ void Manacher(char s[],int len)
 		{
 			while(Ma[i + Mp[i]] == Ma[i - Mp[i]])
 			{
-				if(i < Mp[i]) cout << 111 << endl;
+			//	if(i < Mp[i]) cout << 111 << endl;
 				Mp[i]++;  // 向两边进行扩展   以 i 为中心扩展回文串,或者到达边界
 			}
 		}
@@ -66,7 +66,7 @@ int main()
 		for(int i = 0;i < 2*len + 2;i++) cout << Mp[i] << " ";
 	/*	for(int i = 0;i < 2 * len + 2;i++) cnt += Mp[i];
 		cout << cnt << endl;*/
-		printf("%d\n",ans);
+		printf("ans = %d\n",ans);
 	}
 	return 0;
 }

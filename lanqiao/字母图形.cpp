@@ -1,9 +1,9 @@
 //##################################################################
-// File Name: 01字符串.cpp
+// File Name: 字母图形.cpp
 // File Effect: 
 // Author: tttt
 // mail: tttt@xiyoulinux.org
-// Created Time: 2020年03月12日 星期四 11时14分16秒
+// Created Time: 2020年03月19日 星期四 23时25分36秒
 //=============================================================
 //!/usr/bin/python
 
@@ -14,26 +14,25 @@ using namespace std;
 
 int main()
 {
-	vector<int> v(5,0);
+	int n,m;
 
-	for( int i = 0 ; i < 32 ; i ++ )
+	cin >> n >> m;
+	vector<char> leeter(m,'A');
+
+	for( int i = 0 ; i < m ; i ++ )
 	{
-		int tmp = 1;
-		int k = i;
+		leeter[i] = leeter[0] + i;
+	}
 
-		for(int j = 0 ; j < 5 ; j ++ )
+	for( int i = 0 ; i < n ; i ++ )
+	{
+		for( int j = 0 ; j < m ; j ++ )
 		{
-			v[4-j] = (tmp&k);
-			k /= 2;
-		}
-
-		for( int j = 0 ; j < 5; j ++ )
-		{
-			cout << v[j];
+			cout << leeter[(j + i)%m];
 		}
 		cout << endl;
-
 	}
+
 
 
 	return 0;
