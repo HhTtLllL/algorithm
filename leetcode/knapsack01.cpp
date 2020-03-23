@@ -55,13 +55,48 @@ class Knapsack01{
 
 }
 
+//动态规划
+class Knapsack01
+{
+	int knapsack01(const vector<int> &w,const vector<int> &v,int C)
+	{
+		int n = w.size();
+		if( n == 0 ) return 0;
+
+		vector<vector<int>> memo( n,vector<int>( C+1,-1 ));
+
+		for( int j = 0; j <= C ; j ++ )
+		{
+			memo[0][j] = (j >= w[0] ? v[0] : 0);
+		}
+
+		for( int i = 1 ; i < n; i ++ )
+		{
+			for( int j = 0 ; j <= C ; j ++ )
+			{
+				memo[i][j] = memo[i-1][j];
+				if( j >= w[i] )
+				{
+					memo[i][j] = max( memo[i][j] , v[i] + memo[i-1][j-w[i]] );
+				}
+			}
+
+		}
+
+		return memo[n-1][C];
+
+
+
+
+	}
+
+};
+
+
 
 
 int main()
 {
-
-
-
 
 	return 0;
 }
