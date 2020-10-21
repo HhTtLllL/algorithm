@@ -6,24 +6,53 @@
 // Description:
 ///////////////////////////////////////////////////////////////
 class Solution {
-public:
-    bool exist(vector<vector<char>>& board, string word) {
+    
+private:
 
-        int row = 0, col = 0;
-        row = board.size();
-        if(row > 0) {
-            col = board[0].size(); 
+    int row = -1;
+    int col = -1;
+
+public:
+
+    bool dfs(vector<vector<char>>& board, int cur, string& word, int size, int i, int j) {
+
+        if( i < 0 || i >= row || j < 0 || j >= col || board[i][j] == '/') return false;
+
+        char tmp = board[i][j];
+        if(tmp != word[cur]) return false;
+        board[i][j] = '/';
+
+
+        if(size == cur) {
+
+            return true;
         }
 
-        int size = word.size();
+        bool res = dfs(board, cur + 1, word, size, i, j + 1) || 
+                   dfs(board, cur + 1, word, size, i, j - 1) ||
+                   dfs(board, cur + 1, word, size, i + 1, j) || 
+                   dfs(board, cur + 1, word, size, i - 1, j);
 
-        for(int i = 0; i < row; i ++ ){
+        board[i][j] = tmp;
 
-            for(int j = 0; j < col; j ++ ){
+        return res;
+    }
 
-                dfs(board, )
+    bool exist(vector<vector<char>>& board, string word) {
+        row = board.size();
+        int size = word.size() - 1;
+
+        if(row > 0) {
+            
+            col = board[0].size();
+        }
+
+        for(int i = 0; i < row; i ++) {
+            for(int j = 0; j < col; j ++) {
+                if (dfs(board, 0, word, size,i,j)) return true;
             }
         }
 
+        return false;
     }
 };

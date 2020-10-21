@@ -36,3 +36,22 @@ public:
         return nums;
     }
 };
+
+
+//双端队列
+class Solution {
+public:
+    vector<int> exchange(vector<int>& nums) {
+
+        deque<int> d;
+
+        int size = nums.size();
+        for(int i = 0; i < size; i ++) {
+
+            if(nums[i] & 1) d.push_front(nums[i]);
+            else d.push_back(nums[i]);
+        }
+
+        return vector<int>(d.begin(), d.end());
+    }
+};
