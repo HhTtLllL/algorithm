@@ -10,9 +10,11 @@
 class Solution {
 public:
 	vector<string> ans;
+
 	void dfs(string s,TreeNode* root)
 	{
 		if(!root) return ;
+
 		if(path.size()) path += "->";
 		path += to_string(root->val);
 
@@ -29,5 +31,5 @@ public:
 		string s;
 //		s += to_string(root->val);
 		dfs(s,root);
-        }
+    }
 };

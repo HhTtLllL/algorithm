@@ -26,7 +26,7 @@ int main()
 }
 
 inline int dfs(int sum,int num)
- {
+{
 	if(sum > 40 || sum < 0 || v[sum] == 1) return 0; //剪枝
 	
 	if(num > min1) return 0; //如果更新的次数 大于 目前最小的次数时 退出

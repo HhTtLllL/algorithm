@@ -22,11 +22,11 @@ inline int dfs(int sum,int num)
 	{
 		num++;
 		min1 = min(num,min1);
+
 		return 1;
 	}
 	
 	for(int i = sum + m;i >= sum + 1;i--)
-//	for(int i = sum + 1;i <= sum + m;i++)
 	{
 		if(num + 1 >= min1) continue;
 		if(book[i] == 1) continue;
@@ -39,9 +39,6 @@ inline int dfs(int sum,int num)
 	}
 
 	return -1;
-
-
-
 }
 
 int main()

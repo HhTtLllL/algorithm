@@ -36,7 +36,7 @@ void bfs(){
             ny = tmp.y + next1[i][i];
 
             //判断是否越界
-            if(nx < 0 || nx > 4 || ny < 0 || ny > 4) continue;
+            if(nx < 0 || nx > 5 || ny < 0 || ny > 5) continue;
 
             //判断是否是空地，或者是否走过， 1 为墙
             if(a[nx][ny] == 0 || book[nx][ny] == 0) {
@@ -47,9 +47,7 @@ void bfs(){
                 tmp.y = ny;
                 q.push(tmp);
             }
-            
         }       
-        
     }
 }
 

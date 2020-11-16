@@ -1,12 +1,6 @@
 /*   搜组合数
  *   1 2 3 4 ... n
- *   
- *
- *
- *
- *   
- *
- *   */
+ */
 
 class Solution {
 public:
@@ -26,12 +20,11 @@ public:
 			path.pop_back();  //恢复现场
 		}
 	}
-        vector<vector<int>> combine(int n, int k) 
-        {
+    vector<vector<int>> combine(int n, int k) 
+    {
 		vector<int> path;
 		dfs(path,1,n,k);
 
 		return v;
 	}
-    }
 };
