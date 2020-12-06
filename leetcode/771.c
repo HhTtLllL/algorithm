@@ -18,3 +18,23 @@ int numJewelsInStones(char * J, char * S)
 }
 
 
+
+class Solution {
+public:
+    int numJewelsInStones(string J, string S) {
+
+        int sum = 0;
+        int lenj = J.length();
+        int lens = S.length();
+
+        for(int i = 0; i < lenj; i ++) {
+
+            for(int j = 0; j < lens; j ++) {
+
+                if(J[i] == S[j]) sum++;
+            }
+        }
+
+        return sum;
+    }
+};
