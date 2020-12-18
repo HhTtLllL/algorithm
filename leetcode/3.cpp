@@ -42,8 +42,42 @@ public:
 int main()
 {
 	string s("abcabcbb");
-	Solution a;
+
+输出
+1
+差别
+预期结果
+3	Solution a;
 	cout << a.lengthOfLongestSubstring(s);
 
 	return 0;
 }
+
+
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+
+        int book[256];
+
+        int l = 0, r = -1;
+        int cnt = 0;
+
+        while(l < s.length()) {
+
+            if(!book[s[l]]) {       //如果这个字符没有出现过， 右边界往右扩展
+
+                r++;
+                book[s[r]] = 1;
+            }else {                 //如果这个字符如果出现过，左边界往做缩小
+
+                book[l] = 0;
+                l++
+            }
+            
+            cnt = max(cnt, r - l + 1);
+        }
+
+    }
+};
