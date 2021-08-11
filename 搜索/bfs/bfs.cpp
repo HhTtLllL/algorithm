@@ -33,7 +33,7 @@ void bfs(){
         for(int i = 0; i < 4; i ++ ){ 
             
             nx = tmp.x + next1[i][0];
-            ny = tmp.y + next1[i][i];
+            ny = tmp.y + next1[i][1];
 
             //判断是否越界
             if(nx < 0 || nx > 5 || ny < 0 || ny > 5) continue;
